@@ -16,24 +16,35 @@ interface GameState {
   totalPacks: number;
 }
 
+interface PackHistoryEntry {
+  id: string;
+  amount: number;
+  timestamp?: { toDate: () => Date };
+}
+
+interface PlayerHistoryEntry {
+  id: string;
+  amount: number;
+  card: string;
+  timestamp?: { toDate: () => Date };
+}
+
 export default function Home() {
   const [scores, setScores] = useState<Score[]>([]);
   const [gameState, setGameState] = useState<GameState>({ packCount: 0, totalPacks: 0 });
   const [editingScore, setEditingScore] = useState<string | null>(null);
   const [newScore, setNewScore] = useState<string>("");
   const [newPlayer, setNewPlayer] = useState({ name: '', score: '', card: '' });
-  const [editPackCount, setEditPackCount] = useState<string>('');
   const [editingNumerator, setEditingNumerator] = useState(false);
   const [numeratorValue, setNumeratorValue] = useState('');
   const [expandedPlayer, setExpandedPlayer] = useState<string | null>(null);
-  const [playerHistories, setPlayerHistories] = useState<Record<string, any[]>>({});
+  const [playerHistories, setPlayerHistories] = useState<Record<string, PlayerHistoryEntry[]>>({});
   const [addAmount, setAddAmount] = useState<Record<string, string>>({});
   const [addCard, setAddCard] = useState<Record<string, string>>({});
   const [editingName, setEditingName] = useState<string | null>(null);
   const [newName, setNewName] = useState<string>('');
   const [packAddAmount, setPackAddAmount] = useState('');
-  const [packAddCard, setPackAddCard] = useState('');
-  const [packHistory, setPackHistory] = useState<any[]>([]);
+  const [packHistory, setPackHistory] = useState<PackHistoryEntry[]>([]);
   const [unlocked, setUnlocked] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -79,7 +90,7 @@ export default function Home() {
       (snap) => {
         setPlayerHistories((prev) => ({
           ...prev,
-          [expandedPlayer]: snap.docs.map((d) => ({ id: d.id, ...d.data() })),
+          [expandedPlayer]: snap.docs.map((d) => ({ ...(d.data() as PlayerHistoryEntry), id: d.id })),
         }));
       }
     );
@@ -89,7 +100,7 @@ export default function Home() {
   // Listen for packHistory changes
   useEffect(() => {
     const unsub = onSnapshot(collection(db, 'gameState', 'current', 'packHistory'), (snap) => {
-      setPackHistory(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      setPackHistory(snap.docs.map((d) => ({ ...(d.data() as PackHistoryEntry), id: d.id })));
     });
     return () => unsub();
   }, []);
@@ -135,18 +146,6 @@ export default function Home() {
         setNewPlayer({ name: '', score: '', card: '' });
       } catch (error) {
         console.error('Error adding player:', error);
-      }
-    }
-  };
-
-  const updatePackCount = async () => {
-    const value = parseInt(editPackCount);
-    if (!isNaN(value)) {
-      try {
-        await updateDoc(doc(db, 'gameState', 'current'), { packCount: value });
-        setEditPackCount('');
-      } catch (error) {
-        console.error('Error updating pack count:', error);
       }
     }
   };
