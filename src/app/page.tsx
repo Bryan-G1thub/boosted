@@ -333,7 +333,7 @@ export default function Home() {
                   <div className="flex flex-col justify-center items-center gap-16 mt-12">
                     {scores.slice(0, 3).map((score, index) => {
                       let rankStyle = {};
-                      let nameStyle = { color: '#1a365d', fontWeight: 700 };
+                      const nameStyle = { color: '#1a365d', fontWeight: 700 };
                       let scoreStyle = {};
                       if (index === 0) {
                         // Gold for #1
@@ -365,7 +365,7 @@ export default function Home() {
             </div>
             <div className="w-full flex justify-center mt-2 mb-8">
               <div className="text-lg md:text-2xl font-bold text-blue-900 bg-yellow-100 rounded-lg px-6 py-4 shadow-md border border-yellow-300">
-                Gold, Alt-Art, Rainbows & SIR's from BOOSTED packs count as score
+                Gold, Alt-Art, Rainbows & SIR&apos;s from BOOSTED packs count as score
               </div>
             </div>
           </div>
