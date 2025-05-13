@@ -2,7 +2,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1a365d;  /* Dark navy blue */
 }
 
 @theme inline {
@@ -14,8 +14,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #ffffff;  /* Keep light background even in dark mode */
+    --foreground: #1a365d;  /* Keep dark navy blue text even in dark mode */
   }
 }
 

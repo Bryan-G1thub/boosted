@@ -271,130 +271,101 @@ export default function Home() {
   return (
     <>
       {!unlocked ? (
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gray-900">
-          <form onSubmit={handlePassword} className="flex flex-col items-center gap-4 bg-gray-800 p-8 rounded-lg border-2 border-cyan-400 shadow-xl">
-            <div className="text-3xl font-bold text-cyan-400 mb-2">Enter Password</div>
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white">
+          <form onSubmit={handlePassword} className="flex flex-col items-center gap-4 bg-gray-50 p-8 rounded-lg border-2 border-blue-600 shadow-xl">
+            <div className="text-3xl font-bold text-blue-600 mb-2">Enter Password</div>
             <input
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className="px-4 py-2 text-2xl rounded border-2 border-cyan-400 bg-gray-900 text-white focus:outline-none"
+              className="px-4 py-2 text-2xl rounded border-2 border-blue-600 bg-white text-blue-900 focus:outline-none"
               autoFocus
             />
-            {error && <div className="text-red-400 text-lg">{error}</div>}
-            <button type="submit" className="px-8 py-2 bg-cyan-600 text-white text-xl rounded hover:bg-cyan-700">Unlock</button>
+            {error && <div className="text-red-600 text-lg">{error}</div>}
+            <button type="submit" className="px-8 py-2 bg-blue-600 text-white text-xl rounded hover:bg-blue-700">Unlock</button>
           </form>
         </div>
       ) : (
-        <main className="min-h-screen bg-gray-900 text-white p-8">
+        <main className="min-h-screen bg-white text-blue-900 p-8">
           <div className="flex items-center justify-center gap-4 mb-12">
-            <h1 className="font-extrabold text-cyan-400 text-2xl md:text-4xl leading-none">Boosted Pack Round</h1>
+            <h1 className="font-extrabold text-blue-600 text-4xl md:text-7xl leading-none">Boosted Pack Round</h1>
           </div>
 
           {/* Display Section */}
           <div className="w-full pt-12 flex flex-col items-center mb-[120vh]">
             <div className="text-center w-full">
-              <div className="font-extrabold mb-12 text-cyan-400 flex items-center justify-center gap-6 select-none text-7xl md:text-9xl">
-                {editingNumerator ? (
-                  <input
-                    type="number"
-                    value={numeratorValue}
-                    onChange={e => {
-                      const maxDigits = gameState.totalPacks.toString().length;
-                      let val = e.target.value.replace(/[^0-9]/g, '');
-                      if (val.length > maxDigits) val = val.slice(0, maxDigits);
-                      if (parseInt(val) > gameState.totalPacks) val = gameState.totalPacks.toString();
-                      setNumeratorValue(val);
-                    }}
-                    onBlur={saveNumerator}
-                    onKeyDown={handleNumeratorKeyDown}
-                    className="w-64 md:w-80 px-4 py-2 bg-gray-800 border-4 border-cyan-400 rounded text-white text-7xl md:text-9xl text-center outline-none"
-                    autoFocus
-                  />
-                ) : (
-                  <span
-                    className="cursor-pointer hover:underline"
-                    onClick={handleNumeratorClick}
-                    title="Click to edit"
-                  >
-                    {gameState.packCount}
-                  </span>
-                )}
-                <span className="mx-6 text-7xl md:text-9xl font-extrabold">/</span>
-                <span className="text-7xl md:text-9xl font-extrabold text-cyan-400">{gameState.totalPacks}</span>
-              </div>
-              {scores.length === 0 && (
-                <div className="text-center text-5xl text-gray-400 mt-8">No Hits Yet!</div>
-              )}
-              {/* Top 3 Players - Vertical Stack */}
-              <div className="flex flex-col justify-center items-center gap-24 mt-32">
-                {scores.slice(0, 3).map((score, index) => {
-                  let style = {};
-                  let nameStyle = {};
-                  let scoreStyle = {};
-                  if (index === 0) {
-                    // Gold gradient and reduced glow
-                    style = {
-                      background: 'linear-gradient(90deg, #FFD700 0%, #FFFACD 40%, #FFD700 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      filter: 'drop-shadow(0 0 10px #FFD700) drop-shadow(0 0 3px #FFFACD)',
-                    };
-                    nameStyle = {
-                      textShadow: '0 0 5px #FFD700, 0 0 2px #FFFACD',
-                    };
-                    scoreStyle = {
-                      background: 'linear-gradient(90deg, #FFD700 0%, #FFA500 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      filter: 'drop-shadow(0 0 10px #FFD700) drop-shadow(0 0 3px #FFFACD)',
-                    };
-                  } else if (index === 1) {
-                    // Silver gradient and reduced glow
-                    style = {
-                      background: 'linear-gradient(90deg, #e0e0e0 0%, #b0b0b0 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      filter: 'drop-shadow(0 0 8px #e0e0e0) drop-shadow(0 0 2px #b0b0b0)',
-                    };
-                    nameStyle = {
-                      textShadow: '0 0 3px #e0e0e0, 0 0 1px #b0b0b0',
-                    };
-                    scoreStyle = {
-                      background: 'linear-gradient(90deg, #f8fafc 0%, #a3a3a3 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      filter: 'drop-shadow(0 0 8px #e0e0e0) drop-shadow(0 0 2px #b0b0b0)',
-                    };
-                  } else {
-                    // Bronze gradient and reduced glow
-                    style = {
-                      background: 'linear-gradient(90deg, #b87333 0%, #ffb347 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      filter: 'drop-shadow(0 0 8px #b87333) drop-shadow(0 0 2px #ffb347)',
-                    };
-                    nameStyle = {
-                      textShadow: '0 0 3px #b87333, 0 0 1px #ffb347',
-                    };
-                    scoreStyle = {
-                      background: 'linear-gradient(90deg, #b87333 0%, #ffb347 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      filter: 'drop-shadow(0 0 8px #b87333) drop-shadow(0 0 2px #ffb347)',
-                    };
-                  }
-                  return (
-                    <div
-                      key={score.id}
-                      className="flex flex-row items-center justify-center min-w-[320px] gap-8"
+              <div className="flex items-start justify-start gap-12 mb-12 pl-16">
+                <div className="font-extrabold text-blue-600 flex flex-col items-center select-none text-7xl md:text-9xl">
+                  <span className="text-3xl md:text-5xl font-extrabold mb-4 text-blue-900">Pack Count</span>
+                  {editingNumerator ? (
+                    <input
+                      type="number"
+                      value={numeratorValue}
+                      onChange={e => {
+                        const maxDigits = gameState.totalPacks.toString().length;
+                        let val = e.target.value.replace(/[^0-9]/g, '');
+                        if (val.length > maxDigits) val = val.slice(0, maxDigits);
+                        if (parseInt(val) > gameState.totalPacks) val = gameState.totalPacks.toString();
+                        setNumeratorValue(val);
+                      }}
+                      onBlur={saveNumerator}
+                      onKeyDown={handleNumeratorKeyDown}
+                      className="w-32 md:w-40 px-4 py-2 bg-gray-50 border-4 border-blue-600 rounded text-blue-900 text-7xl md:text-9xl text-center outline-none"
+                      autoFocus
+                    />
+                  ) : (
+                    <span
+                      className="cursor-pointer hover:underline"
+                      onClick={handleNumeratorClick}
+                      title="Click to edit"
                     >
-                      <span className="text-8xl font-extrabold" style={style}>#{index + 1}</span>
-                      <span className="text-7xl font-bold text-white" style={nameStyle}>{score.playerName}</span>
-                      <span className="text-8xl font-extrabold" style={scoreStyle}>{Number(score.score).toFixed(2)}</span>
-                    </div>
-                  );
-                })}
+                      {gameState.packCount}
+                    </span>
+                  )}
+                  <div className="w-full border-b-4 border-blue-600 my-2"></div>
+                  <span className="text-7xl md:text-9xl font-extrabold text-blue-600">{gameState.totalPacks}</span>
+                </div>
+                <div className="flex-1 flex flex-col items-center">
+                  {scores.length === 0 && (
+                    <div className="text-center text-5xl text-gray-500 mt-8">No Hits Yet!</div>
+                  )}
+                  {/* Top 3 Players - Vertical Stack */}
+                  <div className="flex flex-col justify-center items-center gap-16 mt-12">
+                    {scores.slice(0, 3).map((score, index) => {
+                      let rankStyle = {};
+                      let nameStyle = { color: '#1a365d', fontWeight: 700 };
+                      let scoreStyle = {};
+                      if (index === 0) {
+                        // Gold for #1
+                        rankStyle = { color: '#B8860B', fontWeight: 900 };
+                        scoreStyle = { color: '#B8860B', fontWeight: 900 };
+                      } else if (index === 1) {
+                        // Silver for #2
+                        rankStyle = { color: '#708090', fontWeight: 900 };
+                        scoreStyle = { color: '#708090', fontWeight: 900 };
+                      } else {
+                        // Bronze for #3
+                        rankStyle = { color: '#8B4513', fontWeight: 900 };
+                        scoreStyle = { color: '#8B4513', fontWeight: 900 };
+                      }
+                      return (
+                        <div
+                          key={score.id}
+                          className="flex flex-row items-center justify-center min-w-[320px] gap-8"
+                        >
+                          <span className="text-8xl font-extrabold" style={rankStyle}>#{index + 1}</span>
+                          <span className="text-7xl font-bold" style={nameStyle}>{score.playerName}</span>
+                          <span className="text-8xl font-extrabold" style={scoreStyle}>{Number(score.score).toFixed(2)}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="w-full flex justify-center mt-2 mb-8">
+              <div className="text-lg md:text-2xl font-bold text-blue-900 bg-yellow-100 rounded-lg px-6 py-4 shadow-md border border-yellow-300">
+                Gold, Alt-Art, Rainbows & SIR's from BOOSTED packs count as score
               </div>
             </div>
           </div>
@@ -407,7 +378,7 @@ export default function Home() {
                 value={newPlayer.name}
                 onChange={(e) => setNewPlayer({ ...newPlayer, name: e.target.value })}
                 placeholder="Player Name"
-                className="px-4 py-2 bg-gray-800 border-2 border-blue-600 rounded text-white placeholder-gray-400"
+                className="px-4 py-2 bg-gray-50 border-2 border-blue-600 rounded text-blue-900 placeholder-gray-500"
               />
               <input
                 type="number"
@@ -424,14 +395,14 @@ export default function Home() {
                   setNewPlayer({ ...newPlayer, score: val });
                 }}
                 placeholder="Score"
-                className="w-32 px-4 py-2 bg-gray-800 border-2 border-blue-600 rounded text-white placeholder-gray-400"
+                className="w-32 px-4 py-2 bg-gray-50 border-2 border-blue-600 rounded text-blue-900 placeholder-gray-500"
               />
               <input
                 type="text"
                 value={newPlayer.card}
                 onChange={(e) => setNewPlayer({ ...newPlayer, card: e.target.value })}
                 placeholder="Which card?"
-                className="w-48 px-4 py-2 bg-gray-800 border-2 border-blue-600 rounded text-white placeholder-gray-400"
+                className="w-48 px-4 py-2 bg-gray-50 border-2 border-blue-600 rounded text-blue-900 placeholder-gray-500"
               />
               <button
                 onClick={addNewPlayer}
@@ -446,13 +417,13 @@ export default function Home() {
           {/* Editable Scoreboard */}
           <div className="max-w-4xl mx-auto mb-16">
             {scores.length === 0 ? (
-              <div className="text-center text-3xl text-gray-400 py-24">No Hits Yet!</div>
+              <div className="text-center text-3xl text-gray-500 py-24">No Hits Yet!</div>
             ) : (
               <div className="space-y-4">
                 {scores.map((score) => (
-                  <div key={score.id} className="flex flex-col border-2 border-green-600 rounded mb-4">
+                  <div key={score.id} className="flex flex-col border-2 border-blue-600 rounded mb-4">
                     <div className="flex justify-between items-center p-4">
-                      <span className="font-medium text-xl text-white">
+                      <span className="font-medium text-xl text-blue-900">
                         {editingName === score.id ? (
                           <input
                             type="text"
@@ -460,7 +431,7 @@ export default function Home() {
                             onChange={e => setNewName(e.target.value)}
                             onBlur={() => saveName(score.id)}
                             onKeyDown={e => handleNameKeyDown(e, score.id)}
-                            className="px-2 py-1 bg-gray-800 border border-blue-400 rounded text-white w-40"
+                            className="px-2 py-1 bg-gray-50 border border-blue-400 rounded text-blue-900 w-40"
                             autoFocus
                           />
                         ) : (
@@ -468,7 +439,7 @@ export default function Home() {
                             {score.playerName}
                             <button
                               onClick={() => handleNameEdit(score.id, score.playerName)}
-                              className="ml-2 px-2 py-1 text-xs bg-blue-700 text-white rounded hover:bg-blue-800"
+                              className="ml-2 px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700"
                             >
                               Edit
                             </button>
@@ -491,37 +462,37 @@ export default function Home() {
                               }
                               setNewScore(val);
                             }}
-                            className="w-24 px-2 py-1 bg-gray-800 border-2 border-green-600 rounded text-white"
+                            className="w-24 px-2 py-1 bg-gray-50 border-2 border-blue-600 rounded text-blue-900"
                             autoFocus
                           />
                           <button
                             onClick={() => handleScoreSubmit(score.id)}
-                            className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+                            className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
                           >
                             Save
                           </button>
                           <button
                             onClick={() => setEditingScore(null)}
-                            className="px-3 py-1 bg-gray-800 text-white rounded hover:bg-gray-700"
+                            className="px-3 py-1 bg-gray-50 text-blue-900 rounded hover:bg-gray-100"
                           >
                             Cancel
                           </button>
                         </div>
                       ) : (
                         <div className="flex items-center gap-4">
-                          <span className="text-2xl font-bold text-yellow-400 drop-shadow-[0_0_8px_rgba(253,224,71,0.7)]">{Number(score.score).toFixed(2)}</span>
+                          <span className="text-2xl font-bold text-blue-600">{Number(score.score).toFixed(2)}</span>
                           <button
                             onClick={() => {
                               setEditingScore(score.id);
                               setNewScore(score.score.toString());
                             }}
-                            className="px-3 py-1 bg-gray-800 text-white rounded hover:bg-gray-700"
+                            className="px-3 py-1 bg-gray-50 text-blue-900 rounded hover:bg-gray-100"
                           >
                             Edit
                           </button>
                           <button
                             onClick={() => setExpandedPlayer(expandedPlayer === score.id ? null : score.id)}
-                            className="px-3 py-1 bg-blue-700 text-white rounded hover:bg-blue-800"
+                            className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
                           >
                             {expandedPlayer === score.id ? 'Hide' : 'Details'}
                           </button>
@@ -529,7 +500,7 @@ export default function Home() {
                       )}
                     </div>
                     {expandedPlayer === score.id && (
-                      <div className="bg-gray-800 p-4 border-t border-green-600">
+                      <div className="bg-gray-50 p-4 border-t border-blue-600">
                         <div className="flex gap-4 mb-4">
                           <input
                             type="number"
@@ -546,31 +517,31 @@ export default function Home() {
                               setAddAmount((prev) => ({ ...prev, [score.id]: val }));
                             }}
                             placeholder="Add Amount"
-                            className="w-32 px-2 py-1 bg-gray-900 border border-gray-600 rounded text-white"
+                            className="w-32 px-2 py-1 bg-white border border-blue-400 rounded text-blue-900"
                           />
                           <input
                             type="text"
                             value={addCard[score.id] || ''}
                             onChange={e => setAddCard((prev) => ({ ...prev, [score.id]: e.target.value }))}
                             placeholder="Which card?"
-                            className="w-48 px-2 py-1 bg-gray-900 border border-gray-600 rounded text-white"
+                            className="w-48 px-2 py-1 bg-white border border-blue-400 rounded text-blue-900"
                           />
                           <button
                             onClick={() => handleAddHistory(score.id)}
-                            className="px-4 py-1 bg-green-700 text-white rounded hover:bg-green-800"
+                            className="px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
                           >
                             Add
                           </button>
                         </div>
-                        <div className="text-white text-lg font-bold mb-2">History</div>
+                        <div className="text-blue-900 text-lg font-bold mb-2">History</div>
                         <div className="max-h-40 overflow-y-auto space-y-2">
                           {(playerHistories[score.id] || []).length === 0 ? (
-                            <div className="text-gray-400">No history yet.</div>
+                            <div className="text-gray-500">No history yet.</div>
                           ) : (
                             playerHistories[score.id].map((h) => (
-                              <div key={h.id} className="flex gap-4 items-center bg-gray-900 rounded px-2 py-1">
-                                <span className="text-green-400">+{Number(h.amount).toFixed(2)}</span>
-                                <span className="text-gray-300">{h.card}</span>
+                              <div key={h.id} className="flex gap-4 items-center bg-white rounded px-2 py-1">
+                                <span className="text-blue-600">+{Number(h.amount).toFixed(2)}</span>
+                                <span className="text-blue-900">{h.card}</span>
                                 <span className="text-xs text-gray-500">{h.timestamp?.toDate ? new Date(h.timestamp.toDate()).toLocaleString() : ''}</span>
                               </div>
                             ))
@@ -587,7 +558,7 @@ export default function Home() {
           {/* Reset Game Button */}
           <div className="w-full flex flex-col items-center mt-32 mb-8 gap-12">
             {/* Add to Pack Count Section */}
-            <div className="w-full max-w-2xl bg-gray-800 border-2 border-cyan-400 rounded-lg p-6 mb-8">
+            <div className="w-full max-w-2xl bg-gray-50 border-2 border-blue-600 rounded-lg p-6 mb-8">
               <div className="flex gap-4 mb-4">
                 <input
                   type="number"
@@ -604,24 +575,24 @@ export default function Home() {
                     setPackAddAmount(val);
                   }}
                   placeholder="Add Packs"
-                  className="w-32 px-4 py-2 bg-gray-900 border border-cyan-400 rounded text-white"
+                  className="w-32 px-4 py-2 bg-white border border-blue-600 rounded text-blue-900"
                 />
                 <button
                   onClick={handleAddPack}
-                  className="px-6 py-2 bg-cyan-600 text-white rounded hover:bg-cyan-700 transition-colors"
+                  className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
                   disabled={!packAddAmount}
                 >
                   Add
                 </button>
               </div>
-              <div className="text-white text-lg font-bold mb-2">Pack Count History</div>
+              <div className="text-blue-900 text-lg font-bold mb-2">Pack Count History</div>
               <div className="max-h-40 overflow-y-auto space-y-2">
                 {packHistory.length === 0 ? (
-                  <div className="text-gray-400">No history yet.</div>
+                  <div className="text-gray-500">No history yet.</div>
                 ) : (
                   packHistory.map((h) => (
-                    <div key={h.id} className="flex gap-4 items-center bg-gray-900 rounded px-2 py-1">
-                      <span className="text-cyan-400">+{Number(h.amount).toFixed(2)}</span>
+                    <div key={h.id} className="flex gap-4 items-center bg-white rounded px-2 py-1">
+                      <span className="text-blue-600">+{Number(h.amount).toFixed(2)}</span>
                       <span className="text-xs text-gray-500">{h.timestamp?.toDate ? new Date(h.timestamp.toDate()).toLocaleString() : ''}</span>
                     </div>
                   ))
